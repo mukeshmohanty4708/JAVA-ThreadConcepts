@@ -1,0 +1,74 @@
+/*Thread Life Cycle:
+1. new Thread (Create a Thread)
+2. Runnable: The state in which the Task Scheduler know there is a live thread but 
+not in the runnning state (not selected by TS)
+3. Running: The state in which the TS has selected the thread to run.
+4. Blocked: The state in which the thread is live but not running ie in a stale state.
+5. Termninated: The thread is closed ie dead when the control exits the run() method.
+
+
+
+Thread can be created by two ways extending Thread Class or implemnting RUnnable interface.
+Thread Class: ClassName t1 = new ClassName(); t1.start();
+Thread Interface: ClassName obj = new ClassName(); Thread t1 = new Thread(obj); obj.start();
+join : Holds the current Thread and Waits for the newly joined state to execute.
+
+Thread Priority: MIN_PRIORITY = 1, MAX_PRIORITY = 10 and NORM_PRIORITY = 5;
+But no guarantee that the Task Scheduler will prioritze in that order.
+
+Deamon Thread: It is a sub task thread thats life is dependant on the user thread,
+whenever user threads are dead JVM kills all the related deamon threads.
+*/
+
+
+
+public class TestThread{
+
+    public class myThread extends Thread{
+        @Override
+        public void run(){
+            if(Thread.currentThread().isDaemon()){
+                System.out.println("Deamon Thread " + Thread.currentThread().getId() + " " + 
+            Thread.currentThread().getName() + " " + Thread.currentThread().getPriority());
+            } 
+            else{
+                System.out.println("New Thread " + Thread.currentThread().getId() + " " + 
+            Thread.currentThread().getName() + " " + Thread.currentThread().getPriority());
+            }
+        }
+    }
+
+    public class myThreadInterface implements Runnable{
+        @Override
+        public void run(){
+            System.out.println("New Thread Interface " + Thread.currentThread().getId());
+        }
+
+    }
+
+
+    public static void main(String[] args){
+/* Creating the Threads Class and Interface */
+
+        TestThread th = new TestThread();
+        TestThread.myThread t1 = th.new myThread();
+        t1.start();
+
+        // myThreadInterface ih = th.new myThreadInterface();
+        // Thread i1 = new Thread(ih);
+        // i1.start();
+
+/* Setting the Priority */
+        TestThread.myThread t2 = th.new myThread();
+        TestThread.myThread t3 = th.new myThread();
+        t2.setPriority(Thread.MIN_PRIORITY);
+        t3.setPriority(Thread.MAX_PRIORITY);
+        t2.start();
+        t3.start();
+
+/* Setting the Deamon Thread */
+    TestThread.myThread t4 = th.new myThread();
+    t4.setDaemon(true);
+    t4.start();
+    } 
+}
